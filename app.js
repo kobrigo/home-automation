@@ -14,15 +14,18 @@
 //    setTimeout(closePins, 3000);
 //}
 //
-//function closePins() {
-//    gpio.destroy(function() {
-//        console.log('All pins unexported');
-//        return process.exit(0);
-//    });
-//}
+
 
 var gpio = require("pi-gpio");
 var pinToWorkOn = 7;
+
+function closePins() {
+    gpio.destroy(function() {
+        console.log('All pins unexported');
+        return process.exit(0);
+    });
+}
+
 gpio.open(pinToWorkOn, "output", function(err) { 
 
     console.log("error: " + err);
@@ -31,10 +34,11 @@ gpio.open(pinToWorkOn, "output", function(err) {
         setTimeout(function() { 
             console.log("closing pin: " + pinToWorkOn);
             gpio.write(pinToWorkOn, 0, function() {
-            	gpio.close(pinToWorkOn);	
+            	gpio.close(pinToWorkOn);
+
+                closePins();
             });
-//            gpio.close(pinToWorkOn);
-            
-        }, 3000);
+
+        }, 5000);
     });
 });
