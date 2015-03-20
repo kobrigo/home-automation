@@ -1,10 +1,11 @@
+/* global require,console,__dirname,process */
 var express= require('express');
 var httpModule = require('http');
 var socketio = require('socket.io');
 
 var app = express();
-var http = httpModule.Server(app);
-var io = socketio(http);
+var server = httpModule.Server(app);
+var io = socketio(server);
 
 app.use(express.static(__dirname + '/public'));
 
@@ -46,6 +47,13 @@ io.on('connection', function(socket){
     })
 });
 
-http.listen(3000, function(){
+server.listen(3000, function(){
     console.log('listening on *:3000');
+});
+
+process.on('SIGTERM', function () {
+  console.log('Got SIGTERM. terminating');
+  server.close(function () {
+    process.exit(0);
+  });
 });
