@@ -1,12 +1,11 @@
 {
     "name": "naive",
-        "description": "rpi test main packges file",
-        "author": "Eyal Kobrigo kobrigo@gmail.com",
-        "dependencies": {
-        "rpi-gpio": "0.0.4",
+    "description": "rpi test main packges file",
+    "author": "Eyal Kobrigo kobrigo@gmail.com",
+    "dependencies": {
         "pi-gpio": "0.0.2"
     },
-        "scripts": {
+    "scripts": {
         "start": "node ./app.js"
     }
 }
