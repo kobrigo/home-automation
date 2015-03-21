@@ -1,15 +1,18 @@
-/* global require,console */
+/* global require,console,module */
 module.exports = (function () {
     'use strict';
-
-    var config = require('config.js');
-    var logger = require('logger');
-    var _ = require('underscore');
-    var Pin = require('pin');
+	var _ = require('underscore');
+    var config = require('./config');
+    var logger = require('./logger');
+    var Pin = require('./pin');
+    var gpio = require('pi-gpio');
+    var when = require('when');
 
     var pinsModelCollection = [];
-    createPins();
-
+    closeAllPins().then(function(){
+    	createPins(config);	
+    });
+    
     return {
         writeToPin: writeToPin,
         getPinsState: getPinsState,
@@ -17,9 +20,19 @@ module.exports = (function () {
     };
 
     function closeAllPins() {
-        gpio.destroy(function () {
-            logger.log('All pins unexported');
-        });
+    	var promises = [];    	
+    	logger.log("closing all pins");
+    	
+    	config.gpioPins.forEach(function(pinConfig){
+    		var defer = when.defer();
+    		gpio.close(pinConfig.id, function(error){
+    			defer.resolve(error);
+    		});
+    		
+    		promises.push(defer.promise);
+    	});
+        
+        return when.all(promises);
     }
 
     function createPins(config) {
@@ -43,7 +56,12 @@ module.exports = (function () {
     }
 
     function writeToPin(pinNumber, value) {
-        var pin = _.find(pinsModelCollection, {id:pinNumber});
+    	if (!_.isNumber(value)){
+    		value = value ? 0 : 1;
+    	}
+    	logger.log('pinsModelCollection: ' + pinsModelCollection);
+        var pin = _.findWhere(pinsModelCollection, {id:pinNumber});
+        logger.log('pin: ' + pin);
         return pin.write(value);
     }
 

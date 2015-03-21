@@ -2,8 +2,8 @@
 var express = require('express');
 var httpModule = require('http');
 var socketio = require('socket.io');
-var logger = require('logger');
-var gpioService = require('gpio-service');
+var logger = require('./logger');
+var gpioService = require('./gpio-service');
 
 var app = express();
 var server = httpModule.Server(app);
@@ -21,7 +21,17 @@ io.on('connection', function (socket) {
         gpioService.getPinsState().then(function (result) {
             logger.log('sending pins:status:' + JSON.stringify(result));
             socket.emit('pins:status', {gpioPins: result});
-        })
+        });
+    });
+    
+    socket.on('pin:write', function(data){
+    	logger.log('got a request to write to pin: ' + data.id + ' value: ' + data.value); 
+    	gpioService.writeToPin(data.id, data.value).then(function(){
+    		gpioService.getPinsState().then(function (result) {
+                logger.log('sending pins:status:' + JSON.stringify(result));
+                socket.emit('pins:status', {gpioPins: result});
+            });
+    	});
     });
 
     socket.on('disconnect', function (socket) {
@@ -42,7 +52,7 @@ function stopServer() {
     server.close(function () {
         logger.log('exiting');
         process.exit(0);
-    })
+    });
 }
 
 function onSignaledToStop(signalName) {
