@@ -1,9 +1,9 @@
-/* global require,console */
+/* global require,console,module */
 module.exports = (function () {
     'use strict';
 
     var gpio = require('pi-gpio');
-    var logger = require('logger');
+    var logger = require('./logger');
     var when = require('when');
 
     function Pin(pinConfig) {

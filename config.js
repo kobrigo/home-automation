@@ -1,3 +1,4 @@
+/* global module */
 module.exports = (function () {
     'use strict';
 
@@ -6,7 +7,7 @@ module.exports = (function () {
             {
                 id: 7,
                 workMode: 'output',
-                initialState: 0
+                initialState: 1
             },
             {
                 id: 11,
@@ -20,5 +21,5 @@ module.exports = (function () {
             }
         ]
     };
-});
+})();
 

@@ -31,7 +31,7 @@
 <div ng-controller="appController as mainAppController">
     <div class="pins-toggles-container">
         <div ng-repeat="gpioPin in mainAppController.model.gpioPins track by gpioPin.id" class="pin-switch">
-            <md-switch ng-model="gpioPin.state" aria-label="Switch {{::gpioPin.id}}" ng-cloak>
+            <md-switch ng-model="gpioPin.state" aria-label="Switch {{::gpioPin.id}}"  ng-change="handleOnClick(gpioPin)" ng-cloak>
                 GPIO Pin {{::gpioPin.id}}: {{ data.cb1 }}
             </md-switch>
         </div>
