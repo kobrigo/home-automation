@@ -5,6 +5,7 @@ var socketio = require('socket.io');
 var logger = require('./logger');
 var bodyParser = require('body-parser');
 var middleWares = require('./middleware');
+var routes = require('./routes');
 
 var gpioService = require('./gpio-service');
 var app = express();
@@ -15,6 +16,9 @@ var io = socketio(server);
 app.use(middleWares.requestLogger);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
+
+//initate the routes for this server
+routes.init(app);
 
 io.on('connection', function (socket) {
     'use strict';
@@ -53,11 +57,18 @@ server.listen(3000, function () {
 function stopServer() {
     'use strict';
 
-    logger.log('closing the server.');
-    server.close(function () {
-        logger.log('exiting');
-        process.exit(0);
-    });
+    logger.log('closing the server:');
+    logger.log('Closing the pins');
+    gpioService.closeAllPins().finally(function(){
+    	logger.log('closing the server');
+//    	if(server){
+//		    server.close(function () {
+//		        logger.log('exiting');
+		        server = null;
+		        process.exit(0);
+//		    });
+//	    }
+    })
 }
 
 function onSignaledToStop(signalName) {

@@ -26,6 +26,7 @@ module.exports = (function () {
     	config.gpioPins.forEach(function(pinConfig){
     		var defer = when.defer();
     		gpio.close(pinConfig.id, function(error){
+    			logger.log('closed pin:' + pinConfig.id);
     			defer.resolve(error);
     		});
     		
