@@ -3,13 +3,18 @@ var express = require('express');
 var httpModule = require('http');
 var socketio = require('socket.io');
 var logger = require('./logger');
-var gpioService = require('./gpio-service');
+var bodyParser = require('body-parser');
+var middleWares = require('./middleware');
 
+var gpioService = require('./gpio-service');
 var app = express();
 var server = httpModule.Server(app);
-var io = socketio(server);
 
+var io = socketio(server);
+//Middleware
+app.use(middleWares.requestLogger);
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
 
 io.on('connection', function (socket) {
     'use strict';

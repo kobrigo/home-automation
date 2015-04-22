@@ -61,8 +61,12 @@ module.exports = (function () {
     	}
     	logger.log('pinsModelCollection: ' + pinsModelCollection);
         var pin = _.findWhere(pinsModelCollection, {id:pinNumber});
-        logger.log('pin: ' + pin);
-        return pin.write(value);
+        if(pin) {
+            logger.log('pin: ' + pin);
+            return pin.write(value);
+        }
+
+        return when.reject(new Error('the requested pin: ' + pinNumber + 'is not supported'));
     }
 
     function getPinsState() {
