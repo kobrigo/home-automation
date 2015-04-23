@@ -15,7 +15,7 @@ module.exports = (function () {
                 initialState: 1
             },
             {
-                id: 13,
+                id: 15,
                 workMode: 'output',
                 initialState: 0
             }

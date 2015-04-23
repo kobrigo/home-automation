@@ -3,7 +3,7 @@ var logger = {
         console.log(message);
     },
     error: function (message) {
-        console.error(message);
+        console.error('red','ERROR: ' + message);
     },
     warn: function (message) {
         console.waits(message);
