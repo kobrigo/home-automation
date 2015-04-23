@@ -8,9 +8,9 @@ module.exports = (function () {
     var gpio = require('pi-gpio');
     var when = require('when');
 
-    var pinsModelCollection = [];
+    var _pinsModelCollection = [];
     closeAllPins().then(function(){
-    	createPins(config);	
+    	createPins(config);
     });
     
     return {
@@ -46,7 +46,7 @@ module.exports = (function () {
                     return newPinModel.write(pinConfig.initialState);
                 })
                 .then(function () {
-                    pinsModelCollection.push(newPinModel);
+                    _pinsModelCollection.push(newPinModel);
                 })
                 .done();
 
@@ -60,8 +60,7 @@ module.exports = (function () {
     	if (!_.isNumber(value)){
     		value = value ? 0 : 1;
     	}
-    	logger.log('pinsModelCollection: ' + pinsModelCollection);
-        var pin = _.findWhere(pinsModelCollection, {id:pinNumber});
+        var pin = _.findWhere(_pinsModelCollection, {id:pinNumber});
         if(pin) {
             logger.log('pin: ' + pin);
             return pin.write(value);
@@ -73,7 +72,7 @@ module.exports = (function () {
     function getPinsState() {
         var promises = [];
         var returnedResult = [];
-        pinsModelCollection.forEach(function (pin) {
+        _pinsModelCollection.forEach(function (pin) {
             var objectToReturn = {
                 id: pin.id,
                 state: undefined

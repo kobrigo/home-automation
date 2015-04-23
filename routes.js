@@ -9,7 +9,7 @@ module.exports = (function () {
                 logger.log('handling: GET /pins');
                 gpioService.getPinsState()
                     .then(function (pinsStatus) {
-                    	logger.log('Sending pins statu: ' + pinsStatus);
+                        logger.log('Sending pins statu: ' + pinsStatus);
                         res.send(pinsStatus);
                     })
                     .catch(function (error) {
@@ -19,25 +19,25 @@ module.exports = (function () {
             });
 
             app.put('/pins/:pinNumber', function (req, res) {
-            	var pinNumber = req.params['pinNumber'];
-            	logger.log('handling PUT /pins/' + pinNumber);
-                if (pinNumber && req.body.value) {
-                	logger.log('writing to pin ' + pinNumber + ' ' + req.body.value);
+                var pinNumber = req.params['pinNumber'] ? parseInt(req.params['pinNumber']) : null;
+                logger.log('handling PUT /pins/' + pinNumber);
+                if (pinNumber && (req.body.value !== undefined)) {
+                    logger.log('writing to pin ' + pinNumber + ' ' + req.body.value);
                     gpioService.writeToPin(pinNumber, req.body.value)
                         .then(function () {
-                        	logger.log('getting status of all the pins to return');
+                            logger.log('getting status of all the pins to return');
                             return gpioService.getPinsState();
                         })
                         .then(function (pinsStatus) {
-                        	logger.log('sending result');
+                            logger.log('sending result');
                             req.send(pinsStatus);
                         })
                         .catch(function (error) {
                             logger.error(error);
-                             res.status(500).send(error);
+                            res.status(500).send(error);
                         })
                 } else {
-                	         res.status(500).send('There was not body in the request');
+                    res.status(500).send('There was not body in the request');
                 }
             })
         }
