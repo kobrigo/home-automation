@@ -30,7 +30,7 @@ module.exports = (function () {
                         })
                         .then(function (pinsStatus) {
                             logger.log('sending result');
-                            req.send(pinsStatus);
+                            res.send(pinsStatus);
                         })
                         .catch(function (error) {
                             logger.error(error);
