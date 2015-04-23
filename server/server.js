@@ -45,7 +45,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function (socket) {
         logger.log('a user disconnected . id: ' + this.id);
-    })
+    });
 });
 
 server.listen(3000, function () {
@@ -68,7 +68,7 @@ function stopServer() {
 		        process.exit(0);
 //		    });
 //	    }
-    })
+    });
 }
 
 function onSignaledToStop(signalName) {

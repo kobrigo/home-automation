@@ -27,7 +27,7 @@ module.exports = (function () {
 
     function closeAllPins() {
     	var promises = [];    	
-    	logger.log("closing all pins");
+    	logger.log('closing all pins');
     	
     	config.gpioPins.forEach(function(pinConfig){
     		var defer = when.defer();
@@ -68,7 +68,7 @@ module.exports = (function () {
     	}
         var pin = _.findWhere(_pinsModelCollection, {id:pinNumber});
         if(pin) {
-            logger.log('pin: ' + pin);
+            logger.log('pin: ' + pin.id);
             return pin.write(value);
         }
 

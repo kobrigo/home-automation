@@ -29,7 +29,7 @@ module.exports = (function () {
                             return gpioService.getPinsState();
                         })
                         .then(function (pinsStatus) {
-                            logger.log('sending result');
+                            logger.log('sending result: ' + JSON.stringify(pinsStatus));
                             res.send(pinsStatus);
                         })
                         .catch(function (error) {
