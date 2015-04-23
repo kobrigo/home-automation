@@ -2,17 +2,23 @@
 module.exports = (function () {
     'use strict';
 	var _ = require('underscore');
-    var config = require('./config');
+    var config = require('./../config');
     var logger = require('./logger');
     var Pin = require('./pin');
-    var gpio = require('pi-gpio');
     var when = require('when');
+
+    var gpio;
+    if(process.env.developmentMode){
+        gpio = require('./pi-gpio-mock');
+    } else {
+        gpio = require('pi-gpio');
+    }
 
     var _pinsModelCollection = [];
     closeAllPins().then(function(){
     	createPins(config);
     });
-    
+
     return {
         writeToPin: writeToPin,
         getPinsState: getPinsState,

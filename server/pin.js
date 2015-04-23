@@ -2,9 +2,16 @@
 module.exports = (function () {
     'use strict';
 
-    var gpio = require('pi-gpio');
     var logger = require('./logger');
     var when = require('when');
+
+    var gpio;
+    if(process.env.developmentMode){
+        gpio = require('./pi-gpio-mock');
+    } else {
+        gpio = require('pi-gpio');
+    }
+
 
     function Pin(pinConfig) {
         this.id = pinConfig.id;

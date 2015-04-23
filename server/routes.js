@@ -35,11 +35,11 @@ module.exports = (function () {
                         .catch(function (error) {
                             logger.error(error);
                             res.status(500).send(error);
-                        })
+                        });
                 } else {
                     res.status(500).send('There was not body in the request');
                 }
-            })
+            });
         }
-    }
+    };
 })();
