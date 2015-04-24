@@ -35,6 +35,6 @@ module.exports.init = function (io) {
 };
 
 module.exports.broadcastStatus = function (pinsStatus) {
-    _io.sockets.emit(pinsStatus);
+    _io.sockets.emit('pins:status', pinsStatus);
     logger.log('emitting the status to all the sockets');
 };
