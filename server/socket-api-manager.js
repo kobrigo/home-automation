@@ -18,9 +18,9 @@ module.exports.init = function (io) {
             });
         });
 
-        socket.on('pin:write', function(data){
+        socket.on('pin:write', function (data) {
             logger.log('got a request to write to pin: ' + data.id + ' value: ' + data.value);
-            gpioService.writeToPin(data.id, data.value).then(function(){
+            gpioService.writeToPin(data.id, data.value).then(function () {
                 gpioService.getPinsState().then(function (result) {
                     logger.log('sending pins:status:' + JSON.stringify(result));
                     socket.emit('pins:status', {gpioPins: result});
@@ -35,6 +35,6 @@ module.exports.init = function (io) {
 };
 
 module.exports.broadcastStatus = function (pinsStatus) {
-    _io.sockets.emit('pins:status', pinsStatus);
+    _io.sockets.emit('pins:status', {gpioPins: pinsStatus});
     logger.log('emitting the status to all the sockets');
 };
