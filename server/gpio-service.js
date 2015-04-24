@@ -64,7 +64,7 @@ module.exports = (function () {
 
     function writeToPin(pinNumber, value) {
     	if (!_.isNumber(value)){
-    		value = value ? 0 : 1;
+    		value = value ? 1 : 0;
     	}
         var pin = _.findWhere(_pinsModelCollection, {id:pinNumber});
         if(pin) {
@@ -87,7 +87,7 @@ module.exports = (function () {
             returnedResult.push(objectToReturn);
 
             var promise = pin.read().then(function (value) {
-                objectToReturn.state = value === 1;
+                objectToReturn.state = value;
             });
 
             promises.push(promise);

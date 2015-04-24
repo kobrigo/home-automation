@@ -19,8 +19,8 @@ angular.module('mainAppModule').controller('appController', ['$scope', 'appSocke
         appSocketService.on('pins:status', handlePinsStatusUpdate.bind(this));
         
         $scope.handleOnClick = function(pin){
-        	appSocketService.emit('pin:write', {id: pin.id, value:!pin.state});
-        }
+        	appSocketService.emit('pin:write', {id: pin.id, value:pin.state});
+        };
         
 //        $scope.$watch(function(){ return this.model }, function handleModelChanged(){
 //        	window.console.log('the model changed');
