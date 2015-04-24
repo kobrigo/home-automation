@@ -1,6 +1,7 @@
 // This file maps all the routes that this server serves.
 var gpioService = require('./gpio-service');
 var logger = require('./logger');
+var socketApiManager = require('./socket-api-manager');
 
 module.exports = (function () {
     return {
@@ -10,6 +11,7 @@ module.exports = (function () {
                 gpioService.getPinsState()
                     .then(function (pinsStatus) {
                         logger.log('Sending pins statu: ' + pinsStatus);
+                        socketApiManager.broadcastStatus(pinsStatus);
                         res.send(pinsStatus);
                     })
                     .catch(function (error) {
@@ -30,6 +32,7 @@ module.exports = (function () {
                         })
                         .then(function (pinsStatus) {
                             logger.log('sending result: ' + JSON.stringify(pinsStatus));
+                            socketApiManager.broadcastStatus(pinsStatus);
                             res.send(pinsStatus);
                         })
                         .catch(function (error) {
