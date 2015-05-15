@@ -14,7 +14,7 @@ module.exports.init = function (io) {
             logger.log('got pins:getStatus');
             gpioService.getPinsState().then(function (result) {
                 logger.log('sending pins:status:' + JSON.stringify(result));
-                socket.emit('pins:status', {gpioPins: result});
+                io.emit('pins:status', {gpioPins: result});
             });
         });
 
@@ -23,7 +23,7 @@ module.exports.init = function (io) {
             gpioService.writeToPin(data.id, data.value).then(function () {
                 gpioService.getPinsState().then(function (result) {
                     logger.log('sending pins:status:' + JSON.stringify(result));
-                    socket.emit('pins:status', {gpioPins: result});
+                    io.emit('pins:status', {gpioPins: result});
                 });
             });
         });
