@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var middleWares = require('./middleware');
 var routes = require('./routes');
 var socketApiManager = require('./socket-api-manager');
+var schedulerService = require('./scheduler-service');
 var config = require('./../config');
 
 var gpioService = require('./gpio-service');
@@ -27,20 +28,24 @@ server.listen(config.portToListenTo, function () {
     'use strict';
 
     logger.log('listening on port: ' + config.portToListenTo);
+
+    schedulerService.init();
+    schedulerService.start();
 });
 
 function stopServer() {
     'use strict';
 
     logger.log('closing the server:');
+    schedulerService.stop();
     logger.log('Closing the pins');
-    gpioService.closeAllPins().finally(function(){
-    	logger.log('closing the server');
+    gpioService.closeAllPins().finally(function () {
+        logger.log('closing the server');
 //    	if(server){
 //		    server.close(function () {
 //		        logger.log('exiting');
-		        server = null;
-		        process.exit(0);
+        server = null;
+        process.exit(0);
 //		    });
 //	    }
     });
@@ -71,13 +76,17 @@ process.on('SIGINT', function () {
     onSignaledToStop('SIGINT');
 });
 
-process.on('uncaughtException', function(error) {
+process.on('uncaughtException', function (error) {
     'use strict';
 
     // handle the error safely
     logger.log('handling uncaughtException:');
 
     logger.log(error);
+    if (error.stack) {
+        logger.log(error.stack);
+    }
+
     stopServer();
 });
 

@@ -1,12 +1,18 @@
+var moment = require('moment');
+
 var logger = {
     log: function (message) {
-        console.log(message);
+        var now = moment();
+        console.log(now.toString() + ': ' + message);
     },
+
     error: function (message) {
-        console.error('red','ERROR: ' + message);
+        var now = moment();
+        console.error(now.toString() + ': ' + 'ERROR: ' + message);
     },
     warn: function (message) {
-        console.waits(message);
+        var now = moment();
+        console.waits(now.toString() + ': ' + message);
     }
 };
 
