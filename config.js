@@ -1,8 +1,11 @@
-/* global module */
+var argv = require('optimist').argv;
+
 module.exports = (function () {
     'use strict';
 
     return  {
+        portToListenTo : argv.port || 3000,
+        developmentMode: argv.development || false,
         gpioPins: [
             {
                 id: 7,

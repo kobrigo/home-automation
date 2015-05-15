@@ -8,7 +8,7 @@ module.exports = (function () {
     var when = require('when');
 
     var gpio;
-    if(process.env.developmentMode){
+    if(config.developmentMode){
         gpio = require('./pi-gpio-mock');
     } else {
         gpio = require('pi-gpio');

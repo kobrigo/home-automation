@@ -1,12 +1,12 @@
 /* global require,console,module */
 module.exports = (function () {
     'use strict';
-
+    var config = require('./../config');
     var logger = require('./logger');
     var when = require('when');
 
     var gpio;
-    if(process.env.developmentMode){
+    if(config.developmentMode){
         gpio = require('./pi-gpio-mock');
     } else {
         gpio = require('pi-gpio');

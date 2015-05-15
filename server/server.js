@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var middleWares = require('./middleware');
 var routes = require('./routes');
 var socketApiManager = require('./socket-api-manager');
+var config = require('./../config');
 
 var gpioService = require('./gpio-service');
 var app = express();
@@ -22,10 +23,10 @@ app.use(bodyParser.json());
 routes.init(app);
 socketApiManager.init(io);
 
-server.listen(3000, function () {
+server.listen(config.portToListenTo, function () {
     'use strict';
 
-    logger.log('listening on *:3000');
+    logger.log('listening on port: ' + config.portToListenTo);
 });
 
 function stopServer() {
