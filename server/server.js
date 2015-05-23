@@ -8,6 +8,7 @@ var middleWares = require('./middleware');
 var routes = require('./routes');
 var socketApiManager = require('./socket-api-manager');
 var schedulerService = require('./scheduler-service');
+var shaderService = require('./shader-service');
 var config = require('./../config');
 
 var gpioService = require('./gpio-service');
@@ -31,23 +32,30 @@ server.listen(config.portToListenTo, function () {
 
     schedulerService.init();
     schedulerService.start();
+    shaderService.init();
+    shaderService.calculateOpenShaderSequence();
+    //schedulerService.vent.trigger({})
 });
 
 function stopServer() {
     'use strict';
 
-    logger.log('closing the server:');
+    logger.log('Closing the server:');
     schedulerService.stop();
-    logger.log('Closing the pins');
-    gpioService.closeAllPins().finally(function () {
-        logger.log('closing the server');
+    shaderService.stop();
+    //turning off all the pins
+    logger.log('Turning off all the pins');
+    gpioService.writeToAllPins(0).finally(function () {
+        gpioService.closeAllPins().finally(function () {
+            logger.log('Closing the server');
 //    	if(server){
 //		    server.close(function () {
 //		        logger.log('exiting');
-        server = null;
-        process.exit(0);
+            server = null;
+            process.exit(0);
 //		    });
 //	    }
+        });
     });
 }
 

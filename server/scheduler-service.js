@@ -8,6 +8,8 @@ var _schedule = [];
 var _executingEvents = [];
 var _vent = new EventEmitter();
 
+module.exports.vent = _vent;
+
 module.exports.init = function () {
     // read some configuration and prepare to be running.
     // TODO: take this from a file. for now I'll just do it hard coded
@@ -38,12 +40,13 @@ module.exports.init = function () {
     //    beingHandled: false
     //});
 
+    var now = moment();
     _schedule.push({
-        onDays: [5, 6],
+        onDays: [5, 6, 0],
         startAtTime: {
-            hour: 1,
-            minute: 11,
-            second: 0
+            hour: now.hours(),
+            minute: now.minutes(),
+            second: now.seconds() + 10
         },
         duration: moment.duration('00:00:40'),
         fireTickEvery: 200,
@@ -80,11 +83,13 @@ function executeEvent(scheduleEvent) {
 
     scheduleEvent.beingHandled = true;
 
-    _vent.emit(scheduleEvent.eventName + ':start');
+    _vent.emit(scheduleEvent.eventName + ':start', scheduleEvent);
 
     var timeoutId = setTimeout(function () {
-        _vent.emit(scheduleEvent.eventName + ':end');
+        _vent.emit(scheduleEvent.eventName + ':end', scheduleEvent);
         scheduleEvent.beingHandled = false;
+        var indexToRemove = _executingEvents.indexOf(scheduleEvent);
+        _executingEvents.splice(indexToRemove, 1);
         logger.log('Ending execution of event:' + scheduleEvent.eventName);
     }, scheduleEvent.duration.asMilliseconds());
 

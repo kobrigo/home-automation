@@ -37,7 +37,7 @@ module.exports = (function () {
     Pin.prototype.write = function (value) {
         var defer = when.defer();
         var that = this;
-        logger.log('Writing to pin: ' + this.id);
+        logger.log('Writing to pin: ' + this.id + ' value: ' + value);
         gpio.write(this.id, value, function (error) {
             if (error) {
                 defer.reject(new Error('Could not write to pin: ' + that.id + 'with value: ' + value + ' error: ' + error));
