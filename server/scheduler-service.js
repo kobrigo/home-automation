@@ -105,7 +105,7 @@ module.exports.start = function () {
     if (!_isRunning) {
         logger.log('Scheduler Started sampling every: ' + sampleEveryMls + '(mls)');
         _intervalId = setInterval(function runningLoop() {
-            // logger.log('checking schedule');
+            // logger.debug('checking schedule');
             checkSchedule();
         }, sampleEveryMls);
 

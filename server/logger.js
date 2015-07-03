@@ -6,6 +6,11 @@ var logger = {
         console.log(now.toString() + ': ' + message);
     },
 
+    debug: function (message) {
+        var now = moment();
+        console.log(now.toString() + ': ' + message);
+    },
+
     error: function (message) {
         var now = moment();
         console.error(now.toString() + ': ' + 'ERROR: ' + message);
