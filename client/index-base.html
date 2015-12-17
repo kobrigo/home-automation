@@ -4,21 +4,16 @@
     <meta charset="UTF-8">
     <title>Raspberry Pi Home Automation</title>
 
-    <link rel="stylesheet" href="vendor/angular-material/angular-material.min.css">
-    <link rel="stylesheet" href="src/main.css">
+    <link rel="stylesheet" href="../public/vendor/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="src/styles/main.css">
 
     <!-- Angular Material Dependencies -->
-    <script src="vendor/angular/angular.js" defer></script>
-    <script src="vendor/angular-animate/angular-animate.js" defer></script>
-    <script src="vendor/angular-aria/angular-aria.js" defer></script>
-
-    <!-- Angular Material Javascript using RawGit to load directly from `bower-material/master` -->
-    <script src="vendor/angular-material/angular-material.js" defer></script>
-    <script src="vendor/angular-socket-io/socket.js" defer></script>
+    <!-- build:vendorFiles -->
+    This is where all the vendor files will be placed
+    <!-- endbuild -->
 
     <!-- This is what causes the socket.io client module to be loaded-->
     <script src="/socket.io/socket.io.js" defer></script>
-
 
     <!-- application sepecific modules -->
     <script src="src/app-modules.js" defer></script>

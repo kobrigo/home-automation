@@ -1,7 +1,7 @@
 /* global require,console,module */
 'use strict';
 var _ = require('underscore');
-var config = require('./../config');
+var config = require('./config');
 var logger = require('./logger');
 var Pin = require('./pin');
 var when = require('when');

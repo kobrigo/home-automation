@@ -9,7 +9,7 @@ var routes = require('./routes');
 var socketApiManager = require('./socket-api-manager');
 var schedulerService = require('./scheduler-service');
 var shaderService = require('./shader-service');
-var config = require('./../config');
+var config = require('./config');
 
 var gpioService = require('./gpio-service');
 var app = express();
