@@ -17,8 +17,10 @@ var server = httpModule.Server(app);
 
 var io = socketio(server);
 //Middleware
+var publicDirToServeStaticConent = __dirname + '/../public/';
+logger.log('serving satic content from:' + publicDirToServeStaticConent);
 app.use(middleWares.requestLogger);
-app.use(express.static(__dirname + '/../public'));
+app.use(express.static(publicDirToServeStaticConent));
 app.use(bodyParser.json());
 
 //initate the routes for this server
@@ -32,7 +34,7 @@ server.listen(config.portToListenTo, function () {
 
     schedulerService.init();
     schedulerService.start();
-    shaderService.init();
+    //shaderService.init();
     shaderService.calculateOpenShaderSequence();
     //schedulerService.vent.trigger({})
 });

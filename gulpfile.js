@@ -6,7 +6,7 @@ var gulp = require('gulp'),
     del = require('del');
 
 var buildConfig = {
-    vendorFilesBase:'./client/**/',
+    vendorFilesBase: './client/**/',
     vendorFiles: [
         'vendor/angular/angular.js',
         'vendor/angular-animate/angular-animate.js',
@@ -14,6 +14,17 @@ var buildConfig = {
         //the order matter here these have to be after the first ones
         'vendor/angular-material/angular-material.js',
         'vendor/angular-socket-io/socket.js'
+    ],
+    applicationFiles: [
+        'src/app-modules.js',
+        'src/app.js',
+        'src/services/app-socket-service.js'
+    ],
+    vendorStyles: [
+        'vendor/angular-material/angular-material.min.css'
+    ],
+    applicationStyles: [
+        'src/styles/main.css'
     ]
 };
 
@@ -41,11 +52,14 @@ gulp.task('clean', function (callback) {
     ], callback);
 });
 
-gulp.task('index', function () {
+gulp.task('index', ['build:copy'], function () {
     return gulp.src('./client/index-base.html')
         // add templates path
         .pipe($.htmlReplace({
-            'vendorFiles': buildConfig.vendorFiles
+            'vendorFiles': buildConfig.vendorFiles,
+            'vendorStyles': buildConfig.vendorStyles,
+            'applicationFiles': buildConfig.applicationFiles,
+            'applicaitonStyles': buildConfig.applicationStyles
         }))
         .pipe($.rename('index.html'))
         .pipe(gulp.dest('./public/'));
@@ -62,18 +76,26 @@ gulp.task('angular-templates-cache', function () {
 });
 
 
-gulp.task('build:copy', function () {
-    gulp.src(['./client/src/**/*.js'])
+gulp.task('build:copy', ['clean'],function () {
+    gulp.src(['./client/src/**/*.js', './client/src/**/*.css'])
         .pipe(gulp.dest('./public/src/'));
 
     var vendorFiles = buildConfig.vendorFiles.map(function (vendorFile) {
         return buildConfig.vendorFilesBase + vendorFile;
     });
 
+    var vendorStyles = buildConfig.vendorStyles.map(function (vendorFile) {
+        return buildConfig.vendorFilesBase + vendorFile;
+    });
+
     gulp.src(vendorFiles)
+        .pipe(gulp.dest('./public/'));
+
+    return gulp.src(vendorStyles)
         .pipe(gulp.dest('./public/'));
 });
 
-gulp.task('build', ['clean', 'build:copy','build:compile-scss', 'angular-templates-cache', 'index']);
+gulp.task('build', ['clean', 'build:copy', 'index']);
+//gulp.task('build', ['clean', 'build:copy', 'build:compile-scss', 'angular-templates-cache', 'index']);
 //gulp.task('compile', ['clean', 'compile-scss', 'angular-templates-cache', 'index']);
 
