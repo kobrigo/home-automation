@@ -23,6 +23,11 @@
     <script src="/socket.io/socket.io.js" defer></script>
 
     <!-- application specific modules -->
+    <!-- build:applicationInitials-->
+    This is where all the application initial files fill be loaded. these are nessaery befor the other angualr modules load
+    <!-- endbuild -->
+
+    <!-- application specific modules -->
     <!-- build:applicationFiles -->
     This is where all the application files will be placed
     <!-- endbuild -->
@@ -38,6 +43,8 @@
             </md-switch>
         </div>
     </div>
+
+    <div ui-view="main-view"></div>
 </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-// This file maps all the routes that this server serves.
+// This file maps all thrves.
 var gpioService = require('./gpio-service');
 var logger = require('./logger');
 var socketApiManager = require('./socket-api-manager');

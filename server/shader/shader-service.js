@@ -1,7 +1,7 @@
-var logger = require('./logger');
+var logger = require('./../logger');
 var moment = require('moment');
-var schedulerService = require('./scheduler-service');
-var gpioService = require('./gpio-service');
+var schedulerService = require('./../scheduler-service');
+var gpioService = require('./../gpio-service');
 var _ = require('underscore');
 
 var _operating = false;

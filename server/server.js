@@ -8,7 +8,7 @@ var middleWares = require('./middleware');
 var routes = require('./routes');
 var socketApiManager = require('./socket-api-manager');
 var schedulerService = require('./scheduler-service');
-var shaderService = require('./shader-service');
+var shaderService = require('./shader/shader-service');
 var config = require('./config');
 
 var gpioService = require('./gpio-service');
@@ -20,7 +20,7 @@ var io = socketio(server);
 var publicDirToServeStaticConent = __dirname + '/../public/';
 logger.log('serving satic content from:' + publicDirToServeStaticConent);
 app.use(middleWares.requestLogger);
-app.use(express.static(publicDirToServeStaticConent));
+app.use(express.static(publicDirToServeStaticConent, {index: 'index.html'}));
 app.use(bodyParser.json());
 
 //initate the routes for this server
@@ -34,7 +34,7 @@ server.listen(config.portToListenTo, function () {
 
     schedulerService.init();
     schedulerService.start();
-    //shaderService.init();
+    shaderService.init();
     shaderService.calculateOpenShaderSequence();
     //schedulerService.vent.trigger({})
 });
