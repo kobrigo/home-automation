@@ -1,11 +1,13 @@
 var logger = require('./logger');
 var moment = require('moment');
 var EventEmitter = require('events').EventEmitter;
+var _ = require('lodash');
 
 var _isRunning = false;
 var _intervalId = null;
 var _schedule = [];
 var _executingEvents = [];
+var _scheduleIds = 0;
 var _vent = new EventEmitter();
 
 module.exports.vent = _vent;
@@ -98,6 +100,49 @@ function executeEvent(scheduleEvent) {
         timeoutId: timeoutId
     });
 }
+
+function assignNewScheduleId() {
+    _scheduleIds++;
+    return _scheduleIds;
+}
+
+/**
+ * adds a scheduled event to the collection of events to monitor and execute
+ * @param schedulerEventData
+ */
+module.exports.addSchedule = function (schedulerEventData) {
+    //create a scheduled event object with a new Id
+    var newScheduledEvent = {
+        id: assignNewScheduleId(),
+        onDays: schedulerEventData.onDays,
+        startAtTime: moment().parse(schedulerEventData.startAtTime, 'HH:MM:SS'),
+        duration: moment.duration(schedulerEventData.duration),
+        fireTickEveryMls: 200,
+        eventName: schedulerEventData.eventName,
+        beingHandled: false
+    };
+
+    //push it to the scheduled events array
+    _schedule.push(newScheduledEvent);
+};
+
+/**
+ * remove the scheduled event
+ * @param schedulerEventId
+ */
+module.exports.removeSchedule = function (schedulerEventId) {
+    //find the scheduledEvent
+    //if it is running stop it
+    //remove it from the list of scheduled events
+    var indexToRemove = _.findIndex(_schedule, {id: schedulerEventId});
+    if(indexToRemove !== -1){
+        _schedule.splice(indexToRemove, 1);
+    } else {
+        logger.warn('Trying to remove a scheduler that does not exist in the collection of schedules. scheduleId: ' + schedulerEventId);
+    }
+
+    return (indexToRemove !== -1);
+};
 
 module.exports.start = function () {
     var sampleEveryMls = 200;

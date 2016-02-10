@@ -1,7 +1,7 @@
 /* global require,console,module */
 module.exports = (function () {
     'use strict';
-    var config = require('./../config');
+    var config = require('./config');
     var logger = require('./logger');
     var when = require('when');
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Raspberry Pi Home Automation</title>
+
+    <!--vendor specific styles-->
+    <!-- build:vendorStyles-->
+    This is where all the vendor specific styles will be placed
+    <!-- endbuild -->
+
+    <!--application specific styles-->
+    <!-- build:applicaitonStyles-->
+    This is where all the applicaion specific styles will be placed
+    <!-- endbuild -->
+
+    <!-- Angular Material Dependencies -->
+    <!-- build:vendorFiles -->
+    This is where all the vendor files will be placed
+    <!-- endbuild -->
+
+    <!-- This is what causes the socket.io client module to be loaded-->
+    <script src="/socket.io/socket.io.js" defer></script>
+
+    <!-- application specific modules -->
+    <!-- build:applicationInitials-->
+    This is where all the application initial files fill be loaded. these are nessaery befor the other angualr modules load
+    <!-- endbuild -->
+
+    <!-- application specific modules -->
+    <!-- build:applicationFiles -->
+    This is where all the application files will be placed
+    <!-- endbuild -->
+
+</head>
+<body ng-app="mainAppModule" ng-controller="appController as mainAppController">
+    <div ui-view="main-view" flex layout-fill></div>
+</body>
+</html>

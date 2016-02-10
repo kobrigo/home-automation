@@ -1,7 +1,12 @@
-angular.module('mainAppModule').controller('appController', ['$scope', 'appSocketService',
-    function ($scope, appSocketService) {
-    	var vm = this;
-    	this.model = {
+(function () {
+    'use strict';
+
+    // @ngInject
+    angular.module('mainAppModule').controller('DebugViewController', function ($log, $scope, appSocketService) {
+       $log.log('in debug DebugViewController');
+
+        var vm = this;
+        this.model = {
             gpioPins: [
                 //{
                 //    id: 7,
@@ -9,19 +14,19 @@ angular.module('mainAppModule').controller('appController', ['$scope', 'appSocke
                 //},
             ]
         };
-    	
-        function handlePinsStatusUpdate(e){
+
+        function handlePinsStatusUpdate(e) {
             this.model.gpioPins = e.gpioPins;
         }
 
         //get the socket service and check the state of gpio pins from the server
         appSocketService.emit('pins:getStatus');
         appSocketService.on('pins:status', handlePinsStatusUpdate.bind(this));
-        
-        $scope.handleOnClick = function(pin){
-        	appSocketService.emit('pin:write', {id: pin.id, value:pin.state});
+
+        $scope.handleOnClick = function (pin) {
+            appSocketService.emit('pin:write', {id: pin.id, value: pin.state});
         };
-        
+
 //        $scope.$watch(function(){ return this.model }, function handleModelChanged(){
 //        	window.console.log('the model changed');
 //        	vm.model.gpioPings.forEach(function(pin){
@@ -30,7 +35,7 @@ angular.module('mainAppModule').controller('appController', ['$scope', 'appSocke
 //        }, true);
 
         $scope.$on('$destroy', function () {
-            appSocketService.off('pins:status', handlePinsStatusUpdate);
+            appSocketService.removeListener('pins:status', handlePinsStatusUpdate);
         });
-    }
-]);
+    });
+}());
