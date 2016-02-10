@@ -33,11 +33,7 @@
     <!-- endbuild -->
 
 </head>
-<body ng-app="mainAppModule">
-
-<div ng-controller="appController as mainAppController">
-
-    <div ui-view="main-view"></div>
-</div>
+<body ng-app="mainAppModule" ng-controller="appController as mainAppController">
+    <div ui-view="main-view" flex layout-fill></div>
 </body>
 </html>

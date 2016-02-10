@@ -4,7 +4,7 @@ module.exports = (function () {
     'use strict';
 
     return  {
-        portToListenTo : argv.port || 3000,
+        portToListenTo : argv.port || 4000,
         developmentMode: argv.development || true,
         gpioPins: [
             {

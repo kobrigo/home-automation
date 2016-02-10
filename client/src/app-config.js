@@ -30,7 +30,20 @@
 
                         }
                     }
+                })
+                .state('root.shaderSchedule',{
+                    url: 'shaderSchedule',
+
+                    views: {
+                        'main-content': {
+                            templateUrl: 'src/shader_schedule/shader_schedule_template.html',
+                            controller: 'ShaderScheduleController',
+                            controllerAs: 'shaderVm'
+
+                        }
+                    }
                 });
+
         })
 
         // @ngInject

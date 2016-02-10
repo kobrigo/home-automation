@@ -3,7 +3,7 @@
 
     // @ngInject
     angular.module('mainAppModule').controller('SideNavController',
-        function ($log, $scope, appSocketService, $mdSidenav, $timeout) {
+        function ($log, $scope, appSocketService, $mdSidenav, $timeout, $state) {
             this.$log = $log;
             this.$timeout = $timeout;
             /**
@@ -23,22 +23,6 @@
                 };
             };
 
-            /**
-             * Build handler to open/close a SideNav; when animation finishes
-             * report completion in console
-             */
-            this.buildDelayedToggler = function buildDelayedToggler(navID) {
-                var self = this;
-                return this.debounce(function () {
-                    self.$log.log('toggled delayed');
-                    $mdSidenav(navID)
-                        .toggle()
-                        .then(function () {
-                            self.$log.debug("toggle " + navID + " is done");
-                        });
-                }, 200);
-            };
-
             this.buildToggler = function buildToggler(navID) {
                 var self = this;
                 return function () {
@@ -46,34 +30,29 @@
                     $mdSidenav(navID)
                         .toggle()
                         .then(function () {
-                            self.$log.debug("toggle " + navID + " is done");
+                            self.$log.debug('toggle ' + navID + ' is done');
                         });
                 };
             };
 
-            this.toggleLeft = this.buildDelayedToggler('left');
-            this.toggleRight = this.buildToggler('right');
-            this.isOpenRight = function () {
-                return $mdSidenav('right').isOpen();
+            this.toggleLeft = this.buildToggler('left');
+            this.isLeftOpen = function () {
+                return $mdSidenav('left').isOpen();
             };
 
-        })
-        // @ngInject
-        .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {
-            $scope.close = function () {
-                $mdSidenav('left').close()
-                    .then(function () {
-                        $log.debug("close LEFT is done");
-                    });
+            this.openShaderSchedule = function openShaderSchedule() {
+                $state.go('root.shaderSchedule');
+                $mdSidenav('left').close();
             };
-        })
-        // @ngInject
-        .controller('RightCtrl', function ($scope, $timeout, $mdSidenav, $log) {
-            $scope.close = function () {
-                $mdSidenav('right').close()
-                    .then(function () {
-                        $log.debug("close RIGHT is done");
-                    });
+
+            this.openDebugging = function openDebugging() {
+                $state.go('root.debug');
+                $mdSidenav('left').close();
             };
+
+            this.closeSideNav = function closeSideNav() {
+                $mdSidenav('left').close();
+            };
+
         });
 }());

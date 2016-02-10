@@ -35,7 +35,7 @@
 //        }, true);
 
         $scope.$on('$destroy', function () {
-            appSocketService.off('pins:status', handlePinsStatusUpdate);
+            appSocketService.removeListener('pins:status', handlePinsStatusUpdate);
         });
     });
 }());
