@@ -1,1 +1,13 @@
-<div>this is the scheduler template</div>
+<div>
+    <ul>
+        <li ng-repeat="schedule in shaderVm.schedules track by schedule.id">
+            <p>{{schedule.id}}</p>
+            <input type="text" ng-model="schedule.onDays">
+            <input type="text" ng-model="schedule.startAtTime">
+            <input type="text" ng-model="schedule.duration">
+            <input type="text" ng-model="schedule.fireTickEveryMls">
+            <input type="text" ng-model="schedule.eventName">
+            <input type="text" ng-model="schedule.enabled">
+        </li>
+    </ul>
+</div>

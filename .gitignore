@@ -3,3 +3,4 @@ public/
 .idea
 client/vendor/
 
+npm-debug.log

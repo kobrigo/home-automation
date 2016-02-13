@@ -1,6 +1,6 @@
 module.exports.init = function (app) {
     // returns a list of all the schedules for the shader
-    app.get('/sharder/schedules', function (req, res) {
+    app.get('/shader/schedules', function (req, res) {
         res.send([
             {
                 id: 0,
@@ -42,7 +42,7 @@ module.exports.init = function (app) {
         ]);
     });
 
-    app.update('/sharder/schedules/:id', function (req, res) {
-
-    });
+    //app.update('/shader/schedules/:id', function (req, res) {
+    //
+    //});
 };

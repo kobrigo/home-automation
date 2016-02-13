@@ -2,10 +2,13 @@
 var gpioService = require('./gpio-service');
 var logger = require('./logger');
 var socketApiManager = require('./socket-api-manager');
+var shaderRoutes = require('./shader/shader-routes');
 
 module.exports = (function () {
     return {
         init: function (app) {
+            shaderRoutes.init(app);
+
             app.get('/pins', function (req, res) {
                 logger.log('handling: GET /pins');
                 gpioService.getPinsState()

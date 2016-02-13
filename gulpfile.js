@@ -14,6 +14,7 @@ var buildConfig = {
         '/jquery/dist/jquery.js',
         '/angular/angular.js',
         '/angular-animate/angular-animate.js',
+        '/angular-resource/angular-resource.js',
         '/angular-aria/angular-aria.js',
         //the order matter here these have to be after the first ones
         '/angular-material/angular-material.js',

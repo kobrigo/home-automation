@@ -6,6 +6,7 @@
 
     angular.module('mainAppModule', [
         'ngMaterial',
+        'ngResource',
         'btford.socket-io',
         'ui.router',
         'templates'
