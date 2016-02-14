@@ -33,10 +33,8 @@ server.listen(config.portToListenTo, function () {
     logger.log('listening on port: ' + config.portToListenTo);
 
     schedulerService.init();
-    schedulerService.start();
     shaderService.init();
-    shaderService.calculateOpenShaderSequence();
-    //schedulerService.vent.trigger({})
+    //shaderService.calculateOpenShaderSequence();
 });
 
 function stopServer() {

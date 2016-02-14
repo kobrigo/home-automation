@@ -1,6 +1,7 @@
 var logger = require('./../logger');
 var moment = require('moment');
 var schedulerService = require('./../scheduler-service');
+var persistencyService = require('./../persistancy-service');
 var gpioService = require('./../gpio-service');
 var _ = require('underscore');
 
@@ -16,6 +17,8 @@ var _shaderSpeed = 20 / 1000; // the speed is expresses in cm/ms
 var _minWorkTimeInterval = 1 * 1000;
 var _currentShaderSequence = [];
 var _timeItTakesToClose = 0;
+
+var _schedules = null;
 
 function openShadeTick() {
     var timeToMoveShade = true;
@@ -63,9 +66,42 @@ function closeShadeTick() {
 
 }
 
+function initializeShaderSchedules(schedules){
+    logger.log('initializing shader schedules');
+    _schedules = persistencyService.read('shader');
+
+    //schedule the events on the scheduler
+    _.forEach(_schedules, function (schedule) {
+        logger.log('adding shader schedule:' + JSON.stringify(schedule));
+        var schedulerId = schedulerService.addSchedule(schedule);
+        schedule.schedulerId = function () {
+            return schedulerId;
+        };
+    });
+    // TODO: remove this
+    var now = moment();
+    var testSchedule = {
+        onDays: [5, 6, 0],
+        startAtTime: now.add(10, 'seconds').format('hh:mm:ss'),
+        duration: moment.duration('00:00:40'),
+        fireTickEvery: 200,
+        eventName: 'OpenShade',
+        beingHandled: false
+    };
+
+    _schedules.push(testSchedule);
+    var schedulerId = schedulerService.addSchedule(testSchedule);
+    testSchedule.schedulerId = function () {
+        return schedulerId;
+    };
+}
+
 module.exports.init = function () {
     //todo: this can be improved by getting the pins real state and setting the variables to the right value. (important only of we restart the pi during it's action)
     _shadeIsMoving = false;
+
+    //read the schedules from the storage
+    initializeShaderSchedules();
 
     //register to the scheduler events
     schedulerService.vent.on('OpenShade:start', function (openStartEvent) {

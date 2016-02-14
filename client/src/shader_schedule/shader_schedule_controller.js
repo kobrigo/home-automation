@@ -6,6 +6,10 @@
         $log.log('in debug ShaderScheduleController');
 
         this.schedules = ShaderService.schedules;
+
+        this.saveSchedule = function saveSchedule(schedule){
+            ShaderService.updateSchedule(schedule);
+        };
     });
 }());
 

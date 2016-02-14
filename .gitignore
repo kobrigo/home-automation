@@ -4,3 +4,4 @@ public/
 client/vendor/
 
 npm-debug.log
+server/resources/

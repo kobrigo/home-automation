@@ -13,48 +13,8 @@ var _vent = new EventEmitter();
 module.exports.vent = _vent;
 
 module.exports.init = function () {
-    // read some configuration and prepare to be running.
-    // TODO: take this from a file. for now I'll just do it hard coded
-    //_schedule.push({
-    //    onDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-    //    startAtTime: moment().parse('07:00:00', 'HH:MM:SS'),
-    //    duration: moment.duration('00:15:00'),
-    //    fireTickEveryMls: 200,
-    //    eventName: 'OpenShade',
-    //    beingHandled: false
-    //});
-    //
-    //_schedule.push({
-    //    onDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-    //    startAtTime: moment().parse('21:00:00', 'HH:MM:SS'),
-    //    duration: moment.duration('00:15:00'),
-    //    fireTickEveryMls: 200,
-    //    eventName: 'CloseShade',
-    //    beingHandled: false
-    //});
-    //
-    //_schedule.push({
-    //    onDays: ['Friday', 'Saturday'],
-    //    startAtTime: moment().parse('09:00:00', 'HH:MM:SS'),
-    //    duration: moment.duration('00:00:30'),
-    //    fireTickEvery: 200,
-    //    eventName: 'OpenShade',
-    //    beingHandled: false
-    //});
 
-    var now = moment();
-    _schedule.push({
-        onDays: [5, 6, 0],
-        startAtTime: {
-            hour: now.hours(),
-            minute: now.minutes(),
-            second: now.seconds() + 10
-        },
-        duration: moment.duration('00:00:40'),
-        fireTickEvery: 200,
-        eventName: 'OpenShade',
-        beingHandled: false
-    });
+    module.exports.start();
 };
 
 function checkSchedule() {
@@ -65,9 +25,9 @@ function checkSchedule() {
             //normalize the event to this time since it only represented in hours in the day
             var eventStartTime = moment(now);
             eventStartTime.set({
-                'hour': scheduleEvent.startAtTime.hour,
-                'minute': scheduleEvent.startAtTime.minute,
-                'second': scheduleEvent.startAtTime.second
+                'hour': scheduleEvent.startAtTime.hours(),
+                'minute': scheduleEvent.startAtTime.minutes(),
+                'second': scheduleEvent.startAtTime.seconds()
             });
 
             var eventEndTime = moment(eventStartTime);
@@ -114,8 +74,11 @@ module.exports.addSchedule = function (schedulerEventData) {
     //create a scheduled event object with a new Id
     var newScheduledEvent = {
         id: assignNewScheduleId(),
-        onDays: schedulerEventData.onDays,
-        startAtTime: moment().parse(schedulerEventData.startAtTime, 'HH:MM:SS'),
+        onDays: schedulerEventData.onDays.map(function (dayAsString) {
+            var momentDay = moment(dayAsString,'e');
+            return momentDay.day();
+        }),
+        startAtTime: moment(schedulerEventData.startAtTime, 'hh:mm:ss'),
         duration: moment.duration(schedulerEventData.duration),
         fireTickEveryMls: 200,
         eventName: schedulerEventData.eventName,
@@ -124,6 +87,8 @@ module.exports.addSchedule = function (schedulerEventData) {
 
     //push it to the scheduled events array
     _schedule.push(newScheduledEvent);
+
+    return newScheduledEvent.id;
 };
 
 /**
