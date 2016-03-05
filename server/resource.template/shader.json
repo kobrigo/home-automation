@@ -1,0 +1,56 @@
+[
+    {
+        "id": 0,
+        "onDays": [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday"
+        ],
+        "startAtTime": "07:00:00",
+        "duration": "00:15:00",
+        "fireTickEveryMls": 500,
+        "eventName": "OpenShade",
+        "enabled": true
+    },
+    {
+        "id": 1,
+        "onDays": [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday"
+        ],
+        "startAtTime": "08:00:00",
+        "duration": "00:00:20",
+        "fireTickEveryMls": 200,
+        "eventName": "CloseShade",
+        "enabled": true
+    },
+    {
+        "id": 2,
+        "onDays": [
+            "Friday",
+            "Saturday"
+        ],
+        "startAtTime": "11:00:00",
+        "duration": "00:15:00",
+        "fireTickEveryMls": 200,
+        "eventName": "OpenShade",
+        "enabled": true
+    },
+    {
+        "id": 3,
+        "onDays": [
+            "Friday",
+            "Saturday"
+        ],
+        "startAtTime": "12:00:00",
+        "duration": "00:00:20",
+        "fireTickEveryMls": 200,
+        "eventName": "CloseShade",
+        "enabled": true
+    }
+]
