@@ -1,4 +1,4 @@
-var logger = require('./../logger');
+var logger = require('./../logger').createPrefixedLogger('ShaderService:');
 var moment = require('moment');
 var schedulerService = require('./../scheduler-service');
 var persistencyService = require('./../persistancy-service');
@@ -46,12 +46,12 @@ function openShadeTick() {
     }
 
     if (timeToMoveShade && !_shadeIsMoving) {
-        gpioService.writeToPin(_shaderOpenPin, 1);
+        gpioService.writeToPin(_shaderOpenPin, 0);
         _shadeIsMoving = true;
     }
 
     if (!timeToMoveShade && _shadeIsMoving) {
-        gpioService.writeToPin(_shaderOpenPin, 0);
+        gpioService.writeToPin(_shaderOpenPin, 1);
         _shadeIsMoving = false;
     }
 }
@@ -60,40 +60,38 @@ function closeShadeTick() {
     _eventElapsedTime = moment().subtract(_eventStartTime);
 
     if (!_shadeIsMoving) {
-        gpioService.writeToPin(_shaderClosePin, 1);
+        gpioService.writeToPin(_shaderClosePin, 0);
         _shadeIsMoving = true;
     }
-
 }
 
-function initializeShaderSchedules(schedules){
+function setScheduleInScheduler(schedule) {
+    var schedulerId = schedulerService.addSchedule(schedule);
+    schedule.schedulerId = function () {
+        return schedulerId;
+    };
+}
+
+function initializeShaderSchedules(schedules) {
     logger.log('initializing shader schedules');
     _schedules = persistencyService.read('shader');
 
     //schedule the events on the scheduler
-    _.forEach(_schedules, function (schedule) {
-        logger.log('adding shader schedule:' + JSON.stringify(schedule));
-        var schedulerId = schedulerService.addSchedule(schedule);
-        schedule.schedulerId = function () {
-            return schedulerId;
-        };
+    _.forEach(_schedules, function (schedule, index) {
+        // TODO: remove this
+        if (index === 0) {
+            var now = moment();
+            _.extend(schedule, {
+                onDays: [5, 6, 0],
+                startAtTime: now.add(10, 'seconds').format('HH:mm:ss'),
+                duration: moment.duration('00:00:40'),
+                fireTickEvery: 200,
+                eventName: 'OpenShade',
+                beingHandled: false
+            });
+        }
+        setScheduleInScheduler(schedule);
     });
-    // TODO: remove this
-    var now = moment();
-    var testSchedule = {
-        onDays: [5, 6, 0],
-        startAtTime: now.add(10, 'seconds').format('hh:mm:ss'),
-        duration: moment.duration('00:00:40'),
-        fireTickEvery: 200,
-        eventName: 'OpenShade',
-        beingHandled: false
-    };
-
-    _schedules.push(testSchedule);
-    var schedulerId = schedulerService.addSchedule(testSchedule);
-    testSchedule.schedulerId = function () {
-        return schedulerId;
-    };
 }
 
 module.exports.init = function () {
@@ -104,7 +102,7 @@ module.exports.init = function () {
     initializeShaderSchedules();
 
     //register to the scheduler events
-    schedulerService.vent.on('OpenShade:start', function (openStartEvent) {
+    schedulerService.vent.on('OpenShade:start', function handleShaderStart(openStartEvent) {
         logger.log('shader-service: got OpenShade:start event: \n' + JSON.stringify(openStartEvent, null, '\t'));
         if (_handlingEvent) {
             logger.log('Already handling an event. skipping this one.');
@@ -118,13 +116,13 @@ module.exports.init = function () {
         _handlingEvent = true;
     });
 
-    schedulerService.vent.on('OpenShade:end', function (openEndEvent) {
+    schedulerService.vent.on('OpenShade:end', function handleShaderEnd(openEndEvent) {
         logger.log('shader-service: got OpenShade:end event: \n' + JSON.stringify(openEndEvent, null, '\t'));
         logger.log('_eventElapsedTime: ' + _eventElapsedTime);
 
         if (_handlingEvent) {
             clearTimeout(_intervalId);
-            gpioService.writeToPin(_shaderOpenPin, 0);
+            gpioService.writeToPin(_shaderOpenPin, 1);
 
             _handlingEvent = false;
             _shadeIsMoving = false;
@@ -151,7 +149,7 @@ module.exports.init = function () {
 
         if (_handlingEvent) {
             clearTimeout(_intervalId);
-            gpioService.writeToPin(_shaderClosePin, 0);
+            gpioService.writeToPin(_shaderClosePin, 1);
             _handlingEvent = false;
             _shadeIsMoving = false;
         }
@@ -163,6 +161,28 @@ module.exports.stop = function () {
     if (_handlingEvent) {
         clearTimeout(_intervalId);
     }
+};
+
+module.exports.getSchedules = function () {
+    return _schedules;
+};
+
+module.exports.setSchedule = function (schedule) {
+    var schedulerBeforeUpdate;
+    var scheduleIndex = _.findIndex(_schedules, {id: schedule.id});
+
+    if (scheduleIndex !== -1) {
+        schedulerBeforeUpdate = _schedules[scheduleIndex];
+        _schedules[scheduleIndex] = schedule;
+        persistencyService.save('shader', _schedules);
+        //for now we update the schedule by removeing it and then adding
+        schedulerService.removeSchedule(schedulerBeforeUpdate.schedulerId());
+        setScheduleInScheduler(schedulerBeforeUpdate);
+        return _schedules;
+    }
+
+    logger.error('could not find schedule: ' + JSON.stringify(schedule, null, '   '));
+    return null;
 };
 
 module.exports.calculateCloseShaderSequence = function () {

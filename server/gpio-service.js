@@ -2,7 +2,7 @@
 'use strict';
 var _ = require('underscore');
 var config = require('./config');
-var logger = require('./logger');
+var logger = require('./logger').createPrefixedLogger('GPIO-Service:');
 var Pin = require('./pin');
 var when = require('when');
 
