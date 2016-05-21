@@ -43,7 +43,7 @@ function openShadeTick() {
     } else {
         logger.info('openShadeTick: could not find the currentInterval');
         if (_eventElapsedTime >= _currentShaderSequence[_currentShaderSequence.length - 1].endTime) {
-            logger.info('openShadeTick: time exceeded the last interval stopping and waiting for stop signal of the whole schedule');
+            logger.log('openShadeTick: time exceeded the last interval stopping and waiting for stop signal of the whole schedule');
             timeToMoveShade = false;
         } else {
             logger.error('openShadeTick: could not find the currentInterval and its not the last interval');
