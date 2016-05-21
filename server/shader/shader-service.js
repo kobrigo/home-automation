@@ -47,8 +47,8 @@ function openShadeTick() {
             timeToMoveShade = false;
         } else {
             logger.error('openShadeTick: could not find the currentInterval and its not the last interval');
+            return;
         }
-        return;
     }
 
     if (timeToMoveShade && !_shadeIsMoving) {
