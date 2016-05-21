@@ -41,7 +41,7 @@ function openShadeTick() {
             logger.error('openShadeTick: The type of the current interval is unknown: ' + currentInterval.type);
         }
     } else {
-        logger.info('openShadeTick: could not find the currentInterval');
+        logger.log('openShadeTick: could not find the currentInterval');
         if (_eventElapsedTime >= _currentShaderSequence[_currentShaderSequence.length - 1].endTime) {
             logger.log('openShadeTick: time exceeded the last interval stopping and waiting for stop signal of the whole schedule');
             timeToMoveShade = false;
