@@ -5,22 +5,20 @@ module.exports = (function () {
 
     return  {
         portToListenTo : argv.port || 4000,
-        developmentMode: argv.development || true,
+        //developmentMode: argv.development || true,
+        developmentMode: false,
         gpioPins: [
             {
                 id: 7,
                 workMode: 'output',
-                initialState: 1
+                initialState: 1,
+                endingState: 1
             },
             {
                 id: 11,
                 workMode: 'output',
-                initialState: 1
-            },
-            {
-                id: 15,
-                workMode: 'output',
-                initialState: 0
+                initialState: 1,
+                endingState: 1
             }
         ]
     };

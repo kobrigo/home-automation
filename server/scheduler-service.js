@@ -70,6 +70,7 @@ function executeEvent(schedule) {
 
     emitStartEvent(schedule);
 
+    logger.log('Executing event: will stop after (Mls): ' + schedule.duration.asMilliseconds());
     var timeoutId = setTimeout(function () {
         stopEvent(schedule);
     }, schedule.duration.asMilliseconds());

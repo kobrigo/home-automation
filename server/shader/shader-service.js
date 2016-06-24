@@ -85,17 +85,6 @@ function initializeShaderSchedules(schedules) {
     //schedule the events on the scheduler
     _.forEach(_schedules, function (schedule, index) {
         // TODO: remove this
-        if (index === 0) {
-            var now = moment();
-            _.extend(schedule, {
-                onDays: [5, 6, 0],
-                startAtTime: now.add(10, 'seconds').format('HH:mm:ss'),
-                duration: moment.duration('00:00:40'),
-                fireTickEvery: 200,
-                eventName: 'OpenShade',
-                beingHandled: false
-            });
-        }
         setScheduleInScheduler(schedule);
     });
 }
