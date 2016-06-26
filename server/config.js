@@ -5,8 +5,8 @@ module.exports = (function () {
 
     return  {
         portToListenTo : argv.port || 4000,
-        //developmentMode: argv.development || true,
-        developmentMode: false,
+        developmentMode: argv.development !== undefined,
+        //developmentMode: false,
         gpioPins: [
             {
                 id: 7,

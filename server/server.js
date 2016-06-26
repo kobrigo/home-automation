@@ -45,18 +45,18 @@ function stopServer() {
     shaderService.stop();
     //turning off all the pins
     logger.log('Turning off all the pins');
-    gpioService.writeToAllPins(0).finally(function () {
-        gpioService.closeAllPins().finally(function () {
+    gpioService.closeAllPins()
+        .then(function success() {
+            logger.log('Turning off all the pins success');
+        })
+        .catch(function error() {
+            logger.log('Turning off all the pins failed');
+        })
+        .finally(function () {
             logger.log('Closing the server');
-//    	if(server){
-//		    server.close(function () {
-//		        logger.log('exiting');
             server = null;
             process.exit(0);
-//		    });
-//	    }
         });
-    });
 }
 
 function onSignaledToStop(signalName) {

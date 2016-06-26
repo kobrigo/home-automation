@@ -15,14 +15,12 @@ if (config.developmentMode) {
 
 var _pinsModelCollection = [];
 
-closeAllPins().then(function () {
-    createPins(config);
-});
 
 module.exports.writeToPin = writeToPin;
 module.exports.getPinsState = getPinsState;
 module.exports.closeAllPins = closeAllPins;
 module.exports.writeToAllPins = writeToAllPins;
+module.exports.getPin = getPin;
 
 function writeToAllPins(value) {
     var promises = [];
@@ -39,18 +37,16 @@ function closeAllPins() {
     var promises = [];
     logger.log('Closing all pins:');
 
-    config.gpioPins.forEach(function (pinConfig) {
-        var defer = when.defer();
-        gpio.close(pinConfig.id, function (error) {
-            logger.log('closed pin:' + pinConfig.id);
-            defer.resolve(error);
-        });
-
-        promises.push(defer.promise);
-    });
-
     //leave the pins in their shutdown state when closing
+    config.gpioPins.forEach(function (pinConfig) {
+        var pin = getPin(pinConfig.id);
+        var promise = pin.write(pinConfig.endingState)
+            .then(function () {
+               return pin.close(pinConfig.id);
+            });
 
+        promises.push(promise);
+    });
 
     return when.all(promises);
 }
@@ -87,6 +83,10 @@ function writeToPin(pinNumber, value) {
     return when.reject(new Error('the requested pin: ' + pinNumber + 'is not supported'));
 }
 
+function getPin(pinNumber) {
+    return _.findWhere(_pinsModelCollection, {id: pinNumber});
+}
+
 function getPinsState() {
     var promises = [];
     var returnedResult = [];
@@ -110,3 +110,4 @@ function getPinsState() {
     });
 }
 
+createPins(config);

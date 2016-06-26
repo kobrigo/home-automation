@@ -26,6 +26,23 @@ module.exports = (function () {
         gpio.open(this.id, this.workMode, function (error) {
             if (error) {
                 defer.reject(new Error('Could not open pin: ' + that.id + 'for work model: ' + that.workMode + ' error: ' + error));
+                return;
+            }
+
+            defer.resolve(that);
+        });
+
+        return defer.promise;
+    };
+
+    Pin.prototype.close = function () {
+        var defer = when.defer();
+        var that = this;
+        logger.log('Closing pin: ' + this.id);
+        gpio.close(this.id, function (error) {
+            if (error) {
+                defer.reject(new Error('Could not close pin: ' + that.id));
+                return;
             }
 
             defer.resolve(that);
@@ -41,6 +58,7 @@ module.exports = (function () {
         gpio.write(this.id, value, function (error) {
             if (error) {
                 defer.reject(new Error('Could not write to pin: ' + that.id + 'with value: ' + value + ' error: ' + error));
+                return;
             }
 
             defer.resolve(value);
@@ -55,6 +73,7 @@ module.exports = (function () {
         gpio.read(this.id, function (error, value) {
             if (error) {
                 defer.reject(new Error('Could not read from pin: ' + that.id + ' error: ' + error));
+                return;
             }
 
             defer.resolve(value);
