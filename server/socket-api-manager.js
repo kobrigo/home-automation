@@ -28,6 +28,8 @@ module.exports.init = function (io) {
             });
         });
 
+        //TODO: add tail api so we can see the the tail of the logs on the client side
+
         socket.on('disconnect', function (socket) {
             logger.log('a user disconnected . id: ' + this.id);
         });
@@ -38,3 +40,4 @@ module.exports.broadcastStatus = function (pinsStatus) {
     _io.sockets.emit('pins:status', {gpioPins: pinsStatus});
     logger.log('emitting the status to all the sockets');
 };
+
