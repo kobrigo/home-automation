@@ -35,7 +35,7 @@
             "Friday",
             "Saturday"
         ],
-        "startAtTime": "16:16:00",
+        "startAtTime": "11:00:00",
         "duration": "00:15:00",
         "fireTickEveryMls": 200,
         "eventName": "OpenShade",

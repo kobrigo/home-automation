@@ -5,7 +5,7 @@ var winston = require('winston');
 
 
 function logFormatterFunction(options) {
-    return options.timestamp().format('L LTS') +' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
+    return options.timestamp().format('L HH:mm:ss:SSSS') + ' '+ options.level.toUpperCase() +' '+ (undefined !== options.message ? options.message : '') +
         (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
 }
 

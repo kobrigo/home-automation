@@ -25,7 +25,7 @@ function openShadeTick() {
     var timeToPause = true;
     _eventElapsedTime = new Date() - _eventStartTime;
 
-    logger.log('_eventElapsedTime: ' + _eventElapsedTime);
+    logger.debug('_eventElapsedTime: ' + _eventElapsedTime);
 
     // check at what interval are we now
     var currentInterval = _.find(_currentShaderSequence, function (interval) {
@@ -106,7 +106,7 @@ module.exports.init = function () {
 
         _eventElapsedTime = 0;
         _eventStartTime = new Date();
-        module.exports.calculateOpenShaderSequence();
+        module.exports.calculateOpenShaderSequence(openStartEvent.duration);
         _intervalId = setInterval(openShadeTick, 200);
         _handlingEvent = true;
     });
@@ -185,10 +185,10 @@ module.exports.calculateCloseShaderSequence = function () {
     _timeItTakesToClose = 100 / _shaderSpeed;
 };
 
-module.exports.calculateOpenShaderSequence = function () {
+module.exports.calculateOpenShaderSequence = function (duration) {
     //create a shader open sequence
     var lengthToOpen = 100; //in cm
-    var duration = 40 * 1000; //15 minuets for the whole event.
+    // var duration = 40 * 1000; //15 minuets for the whole event.
     var timeItWouldTakeWithoutStopIntervals = 100 / _shaderSpeed;
     var numberOfWorkIntervals = timeItWouldTakeWithoutStopIntervals / _minWorkTimeInterval;
     var timeSpentStopping = duration - timeItWouldTakeWithoutStopIntervals;

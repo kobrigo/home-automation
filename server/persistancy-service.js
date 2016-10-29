@@ -7,7 +7,7 @@ var resources = {
 
 module.exports.read = function (resource) {
     if (resource === 'shader') {
-        logger.debug('reading shader resource');
+        logger.log('reading shader resource');
         var shaderAsString = fs.readFileSync(resources['shader']);
         if (shaderAsString && shaderAsString !== '') {
             return JSON.parse(shaderAsString);
